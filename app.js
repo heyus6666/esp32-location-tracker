@@ -101,18 +101,19 @@ function connectMqtt() {
     updateConnectionStatus('connecting');
     
     const serverUrl = document.getElementById('mqtt-server').value;
-    const port = document.getElementById('mqtt-port').value;
+    const port = document.getElementById('mqtt-port').value || '8083';
     const mqttTopic = document.getElementById('mqtt-topic').value;
     
     const clientId = 'webClient_' + Math.random().toString(16).substr(2, 8);
-    const connectUrl = `ws://${serverUrl}:${port}/mqtt`;
+    const connectUrl = `wss://${serverUrl}:${port}/mqtt`;
     
     try {
         mqttClient = mqtt.connect(connectUrl, {
             clientId,
             clean: true,
             connectTimeout: 4000,
-            reconnectPeriod: 1000
+            reconnectPeriod: 1000,
+            rejectUnauthorized: false
         });
         
         mqttClient.on('connect', function() {
