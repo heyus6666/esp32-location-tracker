@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32位置监控</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 引入高德地图API，请将YOUR_API_KEY替换为你在高德开放平台申请的密钥 -->
+    <script type="text/javascript">
+      // 配置安全密钥
+      window._AMapSecurityConfig = {
+        securityJsCode: 'b3624e027c75303b8be73b0b74c801c2',
+      }
+    </script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=f1c66ef729c13e13f2d2645f57b08938"></script>
+    <!-- 引入MQTT客户端库 -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32位置实时监控</h1>
+        
+        <div class="map-container">
+            <div id="map" style="height: 500px; width: 100%;"></div>
+            
+            <div class="info-panel">
+                <h2>设备信息</h2>
+                <div class="info-item">
+                    <span class="label">设备ID:</span>
+                    <span id="deviceId" class="value">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">经度:</span>
+                    <span id="longitude" class="value">0.000000</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">纬度:</span>
+                    <span id="latitude" class="value">0.000000</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">地址:</span>
+                    <span id="address" class="value">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">更新时间:</span>
+                    <span id="updateTime" class="value">-</span>
+                </div>
+                <div class="status-indicator">
+                    <div id="connection-status" class="status-dot disconnected"></div>
+                    <span id="status-text">未连接</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="control-panel">
+            <h2>连接设置</h2>
+            <div class="form-group">
+                <label for="mqtt-server">MQTT服务器:</label>
+                <input type="text" id="mqtt-server" value="broker.emqx.io">
+            </div>
+            <div class="form-group">
+                <label for="mqtt-port">端口:</label>
+                <input type="number" id="mqtt-port" value="8083">
+            </div>
+            <div class="form-group">
+                <label for="mqtt-topic">主题:</label>
+                <input type="text" id="mqtt-topic" value="location/data">
+            </div>
+            <button id="connect-btn">连接</button>
+            <button id="disconnect-btn" disabled>断开</button>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
